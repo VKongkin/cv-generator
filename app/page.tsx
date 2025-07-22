@@ -1,15 +1,37 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { CVEditor } from "@/components/cv-editor";
 import { CVPreview } from "@/components/cv-preview";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Download, Eye, AlertCircle } from "lucide-react";
+import { Download, Eye, AlertCircle, LogOut } from "lucide-react";
 import { generatePDF } from "@/lib/pdf-generator";
-import { type CVData, defaultCVData, type CVSection } from "@/types/cv-types";
+import { type CVSection } from "@/types/cv-types";
+import { useAuth } from "@/components/auth/auth-provider";
+import { LoginForm } from "@/components/auth/login-form";
+import { useCVData } from "@/hooks/use-cv-data";
 
 export default function CVBuilderApp() {
+  const { user, signOut, loading: authLoading } = useAuth();
+  const { cvData, updateCVData, loading: cvLoading, saving, error } = useCVData();
+
+  // Show login form if not authenticated
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginForm />;
+  }
+
   const syncCustomSections = (data: CVData): CVData => {
     const existingCustomSectionIds = data.sectionOrder
       .filter((section) => section.type === "custom")
@@ -42,26 +64,14 @@ export default function CVBuilderApp() {
     return data;
   };
 
-  const [cvData, setCvData] = useState<CVData>(() =>
-    syncCustomSections(defaultCVData)
-  );
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [isHtml2pdfLoaded, setIsHtml2pdfLoaded] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
-  // Remove useLivePreview state
 
-  // Save cvData to localStorage on every change
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        localStorage.setItem("cvData", JSON.stringify(cvData));
-      } catch {}
-    }
-  }, [cvData]);
 
   // Check if html2pdf is loaded
-  useEffect(() => {
+  useState(() => {
     const checkHtml2pdf = () => {
       if ((window as any).html2pdf) {
         setIsHtml2pdfLoaded(true);
@@ -72,8 +82,16 @@ export default function CVBuilderApp() {
     };
 
     checkHtml2pdf();
-  }, []);
+  });
 
+  const handleCVDataChange = (newData: CVData) => {
+    const syncedData = syncCustomSections(newData);
+    updateCVData(syncedData);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
   const handleExportPDF = async () => {
     setIsGeneratingPDF(true);
     setPdfError(null);
@@ -135,14 +153,44 @@ export default function CVBuilderApp() {
     }
   };
 
+  if (cvLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading your CV data...</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto py-8">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">CV Builder</h1>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-4xl font-bold text-gray-900">CV Builder</h1>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600">Welcome, {user.email}</span>
+              <Button onClick={handleSignOut} variant="outline" size="sm">
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          </div>
           <p className="text-gray-600">
             Create and customize your professional CV
           </p>
+          {saving && (
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+              <span className="text-sm text-blue-600">Saving...</span>
+            </div>
+          )}
+          {error && (
+            <div className="text-sm text-red-600 mt-2">
+              Error: {error}
+            </div>
+          )}
         </div>
 
         <div className="flex gap-6">
@@ -187,7 +235,7 @@ export default function CVBuilderApp() {
                   )}
                 </div>
               </div>
-              <CVEditor cvData={cvData} onChange={setCvData} />
+              <CVEditor cvData={cvData} onChange={handleCVDataChange} />
             </Card>
           </div>
 
