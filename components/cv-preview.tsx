@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import type { CVData } from "@/types/cv-types";
 import { Phone, Mail, Github, Linkedin, MapPin } from "lucide-react";
 
