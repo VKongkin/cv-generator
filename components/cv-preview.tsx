@@ -98,7 +98,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
     }>
   ) => (
     <div className="mb-8">
-      <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+      <h2 className="relative font-bold text-lg leading-5 rounded-md uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:translate-y-[-20%] before:w-[34px] before:h-[34px] before:bg-[#149ac5] before:rounded-tl-md before:rounded-bl-md">
         {title}
       </h2>
       <div className="relative">
@@ -154,7 +154,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
     }>
   ) => (
     <div className="mb-8">
-      <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+      <h2 className="relative font-bold text-lg leading-5 rounded-md uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:translate-y-[-20%] before:w-[34px] before:h-[34px] before:bg-[#149ac5] before:rounded-tl-md before:rounded-bl-md">
         {title}
       </h2>
       {items.map((item, index) => (
@@ -231,7 +231,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
 
             {/* About Me */}
             <div className="mb-8">
-              <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+              <h2 className="relative font-bold text-lg leading-5 rounded-md uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:translate-y-[-20%] before:w-[34px] before:h-[34px] before:bg-[#149ac5] before:rounded-tl-md before:rounded-bl-md">
                 About me
               </h2>
               <div className="text-base leading-5">
@@ -242,7 +242,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
             {/* Training */}
             {cvData.training.length > 0 && (
               <div className="mb-8">
-                <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+                <h2 className="relative font-bold text-lg leading-5 rounded-md uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:translate-y-[-20%] before:w-[34px] before:h-[34px] before:bg-[#149ac5] before:rounded-tl-md before:rounded-bl-md">
                   Training
                 </h2>
                 {cvData.training.map((training, index) => (
@@ -262,7 +262,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
             {/* Skills */}
             {cvData.skills.length > 0 && (
               <div className="mb-8">
-                <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+                <h2 className="relative font-bold text-lg leading-5 rounded-md uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:translate-y-[-20%] before:w-[34px] before:h-[34px] before:bg-[#149ac5] before:rounded-tl-md before:rounded-bl-md">
                   Skill
                 </h2>
                 {cvData.skills.map((skill, index) => (
@@ -270,9 +270,9 @@ export function CVPreview({ cvData }: CVPreviewProps) {
                     <span className="text-base leading-8">
                       {skill.name} ({skill.level}%)
                     </span>
-                    <div className="w-full bg-[#333333] h-4">
+                    <div className="w-full bg-[#333333] h-2 rounded-[2px]">
                       <div
-                        className="h-4 bg-[#149ac5]"
+                        className="h-2 bg-[#149ac5] rounded-tl-[2px] rounded-bl-[2px]"
                         style={{ width: `${skill.level}%` }}
                       ></div>
                     </div>
@@ -284,15 +284,15 @@ export function CVPreview({ cvData }: CVPreviewProps) {
             {/* Languages */}
             {cvData.languages.length > 0 && (
               <div className="mb-8">
-                <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+                <h2 className="relative font-bold text-lg leading-5 rounded-md uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:translate-y-[-20%] before:w-[34px] before:h-[34px] before:bg-[#149ac5] before:rounded-tl-md before:rounded-bl-md">
                   Language
                 </h2>
                 {cvData.languages.map((language, index) => (
                   <div key={language.name + index} className="mb-2">
                     <span className="text-base leading-8">{language.name}</span>
-                    <div className="w-full bg-[#333333] h-4">
+                    <div className="w-full bg-[#333333] h-2 rounded-[2px]">
                       <div
-                        className="h-4 bg-[#149ac5]"
+                        className="h-2 bg-[#149ac5] rounded-tl-[2px] rounded-bl-[2px]"
                         style={{ width: `${language.level}%` }}
                       ></div>
                     </div>
@@ -303,13 +303,13 @@ export function CVPreview({ cvData }: CVPreviewProps) {
 
             {/* Contact */}
             <div className="mb-8">
-              <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+              <h2 className="relative font-bold text-lg leading-5 rounded-md uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:translate-y-[-20%] before:w-[34px] before:h-[34px] before:bg-[#149ac5] before:rounded-tl-md before:rounded-bl-md">
                 Contact me
               </h2>
               <ul className="pl-0">
                 {cvData.personalDetails.phone && (
                   <li className="flex items-center mb-1">
-                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                    <div className="w-6 h-6 bg-[#149ac5] rounded-sm flex items-center justify-center mr-2">
                       <Phone className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-base">
@@ -324,7 +324,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
                 )}
                 {cvData.personalDetails.email && (
                   <li className="flex items-center mb-1">
-                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                    <div className="w-6 h-6 bg-[#149ac5] rounded-sm flex items-center justify-center mr-2">
                       <Mail className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-base">
@@ -339,7 +339,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
                 )}
                 {cvData.personalDetails.github && (
                   <li className="flex items-center mb-1">
-                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                    <div className="w-6 h-6 bg-[#149ac5] rounded-sm flex items-center justify-center mr-2">
                       <Github className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-base">
@@ -357,7 +357,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
                 )}
                 {cvData.personalDetails.linkedin && (
                   <li className="flex items-center mb-1">
-                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                    <div className="w-6 h-6 bg-[#149ac5] rounded-sm flex items-center justify-center mr-2">
                       <Linkedin className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-base">
@@ -372,7 +372,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
                 )}
                 {cvData.personalDetails.location && (
                   <li className="flex items-center mb-1">
-                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                    <div className="w-6 h-6 bg-[#149ac5] rounded-sm flex items-center justify-center mr-2">
                       <MapPin className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-base">
