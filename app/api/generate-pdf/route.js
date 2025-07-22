@@ -47,7 +47,7 @@ export async function POST(req) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(previewUrl, { waitUntil: "networkidle0" });
-  await page.waitForSelector(".cv-template", { timeout: 30000 });
+  await page.waitForSelector(".cv-page", { timeout: 30000 });
   // Wait for all images to load
   await page.evaluate(async () => {
     const selectors = Array.from(document.images)

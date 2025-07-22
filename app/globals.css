@@ -84,6 +84,22 @@ body {
   }
 }
 
+.cv-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 16px auto;
+  background: white;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  page-break-after: always;
+  overflow: visible;
+}
+@media print {
+  .cv-page {
+    page-break-after: always;
+    box-shadow: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;

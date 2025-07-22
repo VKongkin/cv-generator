@@ -201,7 +201,7 @@ export default function CVBuilderApp() {
                   Live Preview
                 </div>
               </div>
-              <div className="bg-white shadow-lg overflow-auto max-h-[800px]">
+              <div className="bg-white shadow-lg overflow-auto">
                 <div
                   className="transform scale-75 origin-top-left"
                   ref={previewRef}

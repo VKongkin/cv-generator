@@ -197,201 +197,207 @@ export function CVPreview({ cvData }: CVPreviewProps) {
     .filter((section) => section.enabled)
     .sort((a, b) => a.order - b.order);
 
+  // Multi-page wrapper: all content in .cv-page for page breaks
   return (
-    <div className="cv-template w-[210mm] h-[297mm] mx-auto bg-white text-[#333333] flex text-sm leading-tight overflow-hidden">
-      {/* Left Column */}
-      <div className="w-[35%] min-h-full bg-[#eeeeee]">
-        <div className="p-5">
-          {/* Profile Section */}
-          <div className="text-center mb-11">
-            <div className="w-[175px] h-[175px] mx-auto mb-2 overflow-hidden rounded-full border-3 border-[#149ac5] flex items-center justify-center bg-white">
-              {cvData.personalDetails.profileImage ? (
-                <img
-                  src={
-                    cvData.personalDetails.profileImage || "/placeholder.svg"
-                  }
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                  Photo
-                </div>
-              )}
+    <div className="cv-preview-pages">
+      <div className="cv-page w-[210mm] min-h-[297mm] mx-auto bg-white text-[#333333] flex text-sm leading-tight overflow-visible print:overflow-visible">
+        {/* Left Column */}
+        <div className="w-[35%] min-h-full bg-[#eeeeee]">
+          <div className="p-5">
+            {/* Profile Section */}
+            <div className="text-center mb-11">
+              <div className="w-[175px] h-[175px] mx-auto mb-2 overflow-hidden rounded-full border-3 border-[#149ac5] flex items-center justify-center bg-white">
+                {cvData.personalDetails.profileImage ? (
+                  <img
+                    src={
+                      cvData.personalDetails.profileImage || "/placeholder.svg"
+                    }
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                    Photo
+                  </div>
+                )}
+              </div>
+              <h2 className="font-bold text-2xl leading-7 uppercase text-[#149ac5] mb-1">
+                {cvData.personalDetails.fullName}
+              </h2>
+              <span className="text-base leading-5 uppercase text-black">
+                {cvData.personalDetails.position}
+              </span>
             </div>
-            <h2 className="font-bold text-2xl leading-7 uppercase text-[#149ac5] mb-1">
-              {cvData.personalDetails.fullName}
-            </h2>
-            <span className="text-base leading-5 uppercase text-black">
-              {cvData.personalDetails.position}
-            </span>
+
+            {/* About Me */}
+            <div className="mb-8">
+              <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+                About me
+              </h2>
+              <div className="text-base leading-5">
+                {cvData.personalDetails.aboutMe}
+              </div>
+            </div>
+
+            {/* Training */}
+            {cvData.training.length > 0 && (
+              <div className="mb-8">
+                <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+                  Training
+                </h2>
+                {cvData.training.map((training, index) => (
+                  <div
+                    key={training.title + training.date + index}
+                    className="mb-4"
+                  >
+                    <h3 className="text-base font-bold leading-5 uppercase text-[#149ac5]">
+                      {training.title}
+                    </h3>
+                    <p className="text-base leading-5 mb-1">{training.date}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Skills */}
+            {cvData.skills.length > 0 && (
+              <div className="mb-8">
+                <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+                  Skill
+                </h2>
+                {cvData.skills.map((skill, index) => (
+                  <div key={skill.name + index} className="mb-2">
+                    <span className="text-base leading-8">
+                      {skill.name} ({skill.level}%)
+                    </span>
+                    <div className="w-full bg-[#333333] h-4">
+                      <div
+                        className="h-4 bg-[#149ac5]"
+                        style={{ width: `${skill.level}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Languages */}
+            {cvData.languages.length > 0 && (
+              <div className="mb-8">
+                <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+                  Language
+                </h2>
+                {cvData.languages.map((language, index) => (
+                  <div key={language.name + index} className="mb-2">
+                    <span className="text-base leading-8">{language.name}</span>
+                    <div className="w-full bg-[#333333] h-4">
+                      <div
+                        className="h-4 bg-[#149ac5]"
+                        style={{ width: `${language.level}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Contact */}
+            <div className="mb-8">
+              <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
+                Contact me
+              </h2>
+              <ul className="pl-0">
+                {cvData.personalDetails.phone && (
+                  <li className="flex items-center mb-1">
+                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                      <Phone className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-base">
+                      <a
+                        href={`tel:${cvData.personalDetails.phone}`}
+                        className="text-[#333333] no-underline"
+                      >
+                        {cvData.personalDetails.phone}
+                      </a>
+                    </span>
+                  </li>
+                )}
+                {cvData.personalDetails.email && (
+                  <li className="flex items-center mb-1">
+                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                      <Mail className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-base">
+                      <a
+                        href={`mailto:${cvData.personalDetails.email}`}
+                        className="text-[#333333] no-underline"
+                      >
+                        {cvData.personalDetails.email}
+                      </a>
+                    </span>
+                  </li>
+                )}
+                {cvData.personalDetails.github && (
+                  <li className="flex items-center mb-1">
+                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                      <Github className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-base">
+                      <a
+                        href={cvData.personalDetails.github}
+                        className="text-[#333333] no-underline"
+                      >
+                        {cvData.personalDetails.github.replace(
+                          "https://github.com/",
+                          ""
+                        )}
+                      </a>
+                    </span>
+                  </li>
+                )}
+                {cvData.personalDetails.linkedin && (
+                  <li className="flex items-center mb-1">
+                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                      <Linkedin className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-base">
+                      <a
+                        href={cvData.personalDetails.linkedin}
+                        className="text-[#333333] no-underline"
+                      >
+                        {cvData.personalDetails.fullName}
+                      </a>
+                    </span>
+                  </li>
+                )}
+                {cvData.personalDetails.location && (
+                  <li className="flex items-center mb-1">
+                    <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
+                      <MapPin className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-base">
+                      {cvData.personalDetails.location}
+                    </span>
+                  </li>
+                )}
+              </ul>
+            </div>
           </div>
-
-          {/* About Me */}
-          <div className="mb-8">
-            <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
-              About me
-            </h2>
-            <div className="text-base leading-5">
-              {cvData.personalDetails.aboutMe}
-            </div>
-          </div>
-
-          {/* Training */}
-          {cvData.training.length > 0 && (
-            <div className="mb-8">
-              <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
-                Training
-              </h2>
-              {cvData.training.map((training, index) => (
-                <div
-                  key={training.title + training.date + index}
-                  className="mb-4"
-                >
-                  <h3 className="text-base font-bold leading-5 uppercase text-[#149ac5]">
-                    {training.title}
-                  </h3>
-                  <p className="text-base leading-5 mb-1">{training.date}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Skills */}
-          {cvData.skills.length > 0 && (
-            <div className="mb-8">
-              <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
-                Skill
-              </h2>
-              {cvData.skills.map((skill, index) => (
-                <div key={skill.name + index} className="mb-2">
-                  <span className="text-base leading-8">
-                    {skill.name} ({skill.level}%)
-                  </span>
-                  <div className="w-full bg-[#333333] h-4">
-                    <div
-                      className="h-4 bg-[#149ac5]"
-                      style={{ width: `${skill.level}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Languages */}
-          {cvData.languages.length > 0 && (
-            <div className="mb-8">
-              <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
-                Language
-              </h2>
-              {cvData.languages.map((language, index) => (
-                <div key={language.name + index} className="mb-2">
-                  <span className="text-base leading-8">{language.name}</span>
-                  <div className="w-full bg-[#333333] h-4">
-                    <div
-                      className="h-4 bg-[#149ac5]"
-                      style={{ width: `${language.level}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Contact */}
-          <div className="mb-8">
-            <h2 className="relative font-bold text-lg leading-5 uppercase text-[#149ac5] mb-4 border border-[#149ac5] pt-1.5 pb-1.5 pl-11 pr-4 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[34px] before:h-[34px] before:bg-[#149ac5]">
-              Contact me
-            </h2>
-            <ul className="pl-0">
-              {cvData.personalDetails.phone && (
-                <li className="flex items-center mb-1">
-                  <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
-                    <Phone className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="text-base">
-                    <a
-                      href={`tel:${cvData.personalDetails.phone}`}
-                      className="text-[#333333] no-underline"
-                    >
-                      {cvData.personalDetails.phone}
-                    </a>
-                  </span>
-                </li>
-              )}
-              {cvData.personalDetails.email && (
-                <li className="flex items-center mb-1">
-                  <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
-                    <Mail className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="text-base">
-                    <a
-                      href={`mailto:${cvData.personalDetails.email}`}
-                      className="text-[#333333] no-underline"
-                    >
-                      {cvData.personalDetails.email}
-                    </a>
-                  </span>
-                </li>
-              )}
-              {cvData.personalDetails.github && (
-                <li className="flex items-center mb-1">
-                  <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
-                    <Github className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="text-base">
-                    <a
-                      href={cvData.personalDetails.github}
-                      className="text-[#333333] no-underline"
-                    >
-                      {cvData.personalDetails.github.replace(
-                        "https://github.com/",
-                        ""
-                      )}
-                    </a>
-                  </span>
-                </li>
-              )}
-              {cvData.personalDetails.linkedin && (
-                <li className="flex items-center mb-1">
-                  <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
-                    <Linkedin className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="text-base">
-                    <a
-                      href={cvData.personalDetails.linkedin}
-                      className="text-[#333333] no-underline"
-                    >
-                      {cvData.personalDetails.fullName}
-                    </a>
-                  </span>
-                </li>
-              )}
-              {cvData.personalDetails.location && (
-                <li className="flex items-center mb-1">
-                  <div className="w-6 h-6 bg-[#149ac5] flex items-center justify-center mr-2">
-                    <MapPin className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="text-base">
-                    {cvData.personalDetails.location}
-                  </span>
-                </li>
-              )}
-            </ul>
+        </div>
+        {/* Right Column */}
+        <div className="w-[65%] h-full min-h-full bg-white">
+          <div className="p-5">
+            {/* Render sections in order */}
+            {enabledSections.map((section) =>
+              renderSection(section.id, section.title, section.sectionType)
+            )}
           </div>
         </div>
       </div>
-
-      {/* Right Column */}
-      <div className="w-[65%] h-full min-h-full bg-white">
-        <div className="p-5">
-          {/* Render sections in order */}
-          {enabledSections.map((section) =>
-            renderSection(section.id, section.title, section.sectionType)
-          )}
-        </div>
-      </div>
+      {/*
+        If content overflows a single page, you should split it into multiple .cv-page divs.
+        For now, this is a manual process. For auto-splitting, implement logic to break content into multiple pages.
+      */}
     </div>
   );
 }
