@@ -98,11 +98,23 @@ export default function CVBuilderApp() {
     setIsGeneratingPDF(true);
     setPdfError(null);
     try {
-      console.log("Sending cvData to server:", cvData); // Debug log
+      // 1. Store CV data in cache and get an id
+      const cacheRes = await fetch("/api/cv-cache", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cvData),
+      });
+      if (!cacheRes.ok) {
+        setPdfError("Failed to cache CV data");
+        setIsGeneratingPDF(false);
+        return;
+      }
+      const { id } = await cacheRes.json();
+      // 2. Request PDF generation by id
       const res = await fetch("/api/generate-pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cvData }),
+        body: JSON.stringify({ id }),
       });
       if (!res.ok) {
         setPdfError("Failed to generate PDF");

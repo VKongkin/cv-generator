@@ -3,13 +3,29 @@ import puppeteer from "puppeteer";
 export async function POST(req) {
   let cvData = null;
   let useLivePreview = false;
+  let id = null;
   try {
     const body = await req.text();
     console.log("[API] Raw POST body:", body);
     const parsed = JSON.parse(body);
-    cvData = parsed.cvData;
-    useLivePreview = !!parsed.useLivePreview;
-    console.log("[API] Received cvData from client:", cvData);
+    if (parsed.id) {
+      id = parsed.id;
+      // Fetch CV data from cache
+      const cacheRes = await fetch(
+        `http://localhost:3000/api/cv-cache?id=${id}`
+      );
+      if (cacheRes.ok) {
+        cvData = await cacheRes.json();
+        console.log("[API] Loaded cvData from cache for id:", id);
+      } else {
+        console.log("[API] Failed to load cvData from cache for id:", id);
+        cvData = null;
+      }
+    } else {
+      cvData = parsed.cvData;
+      useLivePreview = !!parsed.useLivePreview;
+      console.log("[API] Received cvData from client:", cvData);
+    }
   } catch (e) {
     console.log("[API] Error parsing POST body:", e);
     cvData = null;
@@ -18,7 +34,9 @@ export async function POST(req) {
   let previewUrl = `http://localhost:3000/cv/preview${
     useLivePreview ? "" : "/pdf"
   }`;
-  if (cvData) {
+  if (id) {
+    previewUrl += `?id=${id}`;
+  } else if (cvData) {
     const encoded = encodeURIComponent(
       typeof cvData === "string" ? cvData : JSON.stringify(cvData)
     );
