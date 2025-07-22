@@ -1,4 +1,5 @@
 "use client";
+import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 
@@ -26,4 +27,10 @@ export function Navbar() {
       </div>
     </nav>
   );
+}
+
+export function NavbarWrapper() {
+  const pathname = usePathname();
+  if (pathname === "/cv/preview/pdf") return null;
+  return <Navbar />;
 }
