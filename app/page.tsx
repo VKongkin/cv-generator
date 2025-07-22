@@ -69,9 +69,8 @@ export default function CVBuilderApp() {
   const [isHtml2pdfLoaded, setIsHtml2pdfLoaded] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
-
   // Check if html2pdf is loaded
-  useState(() => {
+  useEffect(() => {
     const checkHtml2pdf = () => {
       if ((window as any).html2pdf) {
         setIsHtml2pdfLoaded(true);
@@ -82,7 +81,7 @@ export default function CVBuilderApp() {
     };
 
     checkHtml2pdf();
-  });
+  }, []);
 
   const handleCVDataChange = (newData: CVData) => {
     const syncedData = syncCustomSections(newData);
