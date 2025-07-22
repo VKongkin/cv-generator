@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Download, Eye, AlertCircle } from "lucide-react";
 import { generatePDF } from "@/lib/pdf-generator";
 import { type CVData, defaultCVData, type CVSection } from "@/types/cv-types";
+import { useSession } from "next-auth/react";
 
 export default function CVBuilderApp() {
   const syncCustomSections = (data: CVData): CVData => {
@@ -51,14 +52,60 @@ export default function CVBuilderApp() {
   const previewRef = useRef<HTMLDivElement>(null);
   // Remove useLivePreview state
 
-  // Save cvData to localStorage on every change
+  const { data: session, status } = useSession();
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (status === "authenticated") {
+      // Fetch CV from API for logged-in user
+      fetch("/api/cv")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.cv && data.cv.data) {
+            setCvData(syncCustomSections(data.cv.data));
+          } else {
+            // Only create a new CV if user has none
+            fetch("/api/cv", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ data: defaultCVData }),
+            })
+              .then((res) => res.json())
+              .then((created) => {
+                if (created.cv && created.cv.data) {
+                  setCvData(syncCustomSections(created.cv.data));
+                }
+              });
+          }
+        });
+    } else if (typeof window !== "undefined") {
+      // Fallback: load from localStorage
+      try {
+        const stored = localStorage.getItem("cvData");
+        if (stored) setCvData(syncCustomSections(JSON.parse(stored)));
+      } catch {}
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  // Only update CV in DB when user edits, not on every login
+  useEffect(() => {
+    if (status === "authenticated") {
+      // Save to API for logged-in user, but only if not initial load
+      if (cvData && cvData !== defaultCVData) {
+        fetch("/api/cv", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: cvData }),
+        });
+      }
+    } else if (typeof window !== "undefined") {
+      // Save to localStorage for guests
       try {
         localStorage.setItem("cvData", JSON.stringify(cvData));
       } catch {}
     }
-  }, [cvData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cvData, status]);
 
   // Check if html2pdf is loaded
   useEffect(() => {

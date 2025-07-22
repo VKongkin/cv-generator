@@ -1,20 +1,22 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { Navbar } from "@/components/ui/navbar";
+import { SessionWrapper } from "@/components/session-wrapper";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "CV Builder App",
   description: "Create and export professional CVs",
-    generator: 'v0.dev'
-}
+  generator: "v0.dev",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -26,7 +28,12 @@ export default function RootLayout({
           referrerPolicy="no-referrer"
         ></script>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <SessionWrapper>
+          <Navbar />
+          {children}
+        </SessionWrapper>
+      </body>
     </html>
-  )
+  );
 }
