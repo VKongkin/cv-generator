@@ -203,7 +203,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
     <div className="cv-preview-pages">
       <div className="cv-page w-[210mm] min-h-[297mm] mx-auto bg-white text-[#333333] flex text-sm leading-tight overflow-visible print:overflow-visible">
         {/* Left Column */}
-        <div className="w-[35%] min-h-full bg-[#eeeeee]">
+        <div className="w-[35%] h-[297mm] bg-[#eeeeee]">
           <div className="p-5">
             {/* Profile Section */}
             <div className="text-center mb-11">
@@ -386,7 +386,7 @@ export function CVPreview({ cvData }: CVPreviewProps) {
           </div>
         </div>
         {/* Right Column */}
-        <div className="w-[65%] h-full min-h-full bg-white">
+        <div className="w-[65%] h-[297mm] bg-white">
           <div className="p-5">
             {/* Render sections in order */}
             {enabledSections.map((section) => (
