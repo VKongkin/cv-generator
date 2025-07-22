@@ -388,9 +388,11 @@ export function CVPreview({ cvData }: CVPreviewProps) {
         <div className="w-[65%] h-full min-h-full bg-white">
           <div className="p-5">
             {/* Render sections in order */}
-            {enabledSections.map((section) =>
-              renderSection(section.id, section.title, section.sectionType)
-            )}
+            {enabledSections.map((section) => (
+              <React.Fragment key={section.id}>
+                {renderSection(section.id, section.title, section.sectionType)}
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </div>
