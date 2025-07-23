@@ -106,10 +106,10 @@ export function CVPreview({ cvData }: CVPreviewProps) {
           {items.map((item, index) => (
             <li
               key={item.title + item.subtitle + item.dates + index}
-              className="overflow-hidden pl-11 relative mb-9 after:content-[''] after:absolute after:w-0.5 after:h-full after:bg-[#149ac5] after:top-0 after:bottom-0 after:left-2 after:z-10 before:content-[''] before:absolute before:h-4.5 before:w-4.5 before:left-0 before:top-0 before:rounded-full before:z-2 before:bg-[#149ac5]"
+              className="overflow-hidden pl-11 relative mb-4 after:content-[''] after:absolute after:w-[0.5px] after:h-full after:bg-[#149ac5] after:top-0 after:bottom-0 after:left-5 after:z-10 before:content-[''] before:absolute before:h-4.5 before:w-4.5 before:left-0 before:top-0 before:rounded-full before:z-2 before:bg-[#149ac5]"
             >
               <div className="w-full float-left">
-                <h3 className="text-xs leading-3 text-[#149ac5] uppercase mb-1">
+                <h3 className="text-xs leading-3 text-[#149ac5] uppercase mb-1 before:content-[''] before:absolute before:w-3 before:h-3 before:rounded-full before:bg-[#149ac5] before:left-[14px] before:top-1.5 before:-translate-y-1/2 before:z-10">
                   {item.title}
                 </h3>
                 {(item.subtitle || item.dates || item.details) && (
