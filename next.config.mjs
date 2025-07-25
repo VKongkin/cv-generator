@@ -10,6 +10,7 @@ const nextConfig = {
     unoptimized: true,
   },
   experimental: {
+    serverComponentsExternalPackages: ["chrome-aws-lambda"],
     serverActions: {
       bodySizeLimit: "10mb", // Allow up to 10MB payloads for server actions
     },

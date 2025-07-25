@@ -1,7 +1,8 @@
-import puppeteer from "puppeteer";
+import { NextResponse } from "next/server";
+import chromium from "chrome-aws-lambda";
+import puppeteer from "puppeteer-core";
 
 export async function POST(req) {
-  // Use BASE_URL from env if available, otherwise fallback to dynamic baseUrl
   const envBaseUrl = process.env.BASE_URL;
   const host = req.headers.get("host");
   const protocol = req.headers.get("x-forwarded-proto") || "http";
@@ -17,7 +18,6 @@ export async function POST(req) {
     const parsed = JSON.parse(body);
     if (parsed.id) {
       id = parsed.id;
-      // Fetch CV data from cache using baseUrl
       const cacheRes = await fetch(`${baseUrl}/api/cv-cache?id=${id}`);
       if (cacheRes.ok) {
         cvData = await cacheRes.json();
@@ -32,11 +32,10 @@ export async function POST(req) {
       console.log("[API] Received cvData from client:", cvData);
     }
   } catch (e) {
-    console.log("[API] Error parsing POST body:", e);
+    console.error("[API] Error parsing POST body:", e);
     cvData = null;
   }
 
-  // Use baseUrl for previewUrl
   let previewUrl = `${baseUrl}/cv/preview${useLivePreview ? "" : "/pdf"}`;
   if (id) {
     previewUrl += `?id=${id}`;
@@ -48,29 +47,45 @@ export async function POST(req) {
   }
   console.log("[API] Puppeteer previewUrl:", previewUrl);
 
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto(previewUrl, { waitUntil: "networkidle0" });
-  await page.waitForSelector(".cv-page", { timeout: 30000 });
-  // Wait for all images to load
-  await page.evaluate(async () => {
-    const selectors = Array.from(document.images)
-      .map((img) => {
-        if (img.complete) return null;
-        return new Promise((resolve) => {
-          img.addEventListener("load", resolve);
-          img.addEventListener("error", resolve);
-        });
-      })
-      .filter(Boolean);
-    await Promise.all(selectors);
-  });
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  let browser = null;
+  let pdfBuffer = null;
+  try {
+    const isVercel = !!process.env.AWS_LAMBDA_FUNCTION_VERSION;
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: isVercel ? await chromium.executablePath : undefined,
+      headless: true,
+      ignoreHTTPSErrors: true,
+    });
+    const page = await browser.newPage();
+    await page.goto(previewUrl, { waitUntil: "networkidle0" });
+    await page.waitForSelector(".cv-page", { timeout: 30000 });
+    await page.evaluate(async () => {
+      const selectors = Array.from(document.images)
+        .map((img) => {
+          if (img.complete) return null;
+          return new Promise((resolve) => {
+            img.addEventListener("load", resolve);
+            img.addEventListener("error", resolve);
+          });
+        })
+        .filter(Boolean);
+      await Promise.all(selectors);
+    });
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
+  } catch (err) {
+    console.error("[API] Error generating PDF:", err);
+    if (browser) await browser.close();
+    return NextResponse.json(
+      { error: "Failed to generate PDF" },
+      { status: 500 }
+    );
+  }
+  if (browser) await browser.close();
 
-  const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
-  await browser.close();
-
-  return new Response(pdfBuffer, {
+  return new NextResponse(pdfBuffer, {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",
