@@ -12,7 +12,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=###
 If you use a database (e.g., PostgreSQL via Prisma), also set:
 
 ```
-DB_URL=your_supabase_database_url
+DATABASE_URL=your_supabase_database_url
 ```
 
 ## Steps
