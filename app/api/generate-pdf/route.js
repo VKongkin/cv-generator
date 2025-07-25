@@ -1,5 +1,4 @@
-import chromium from "chrome-aws-lambda";
-import puppeteer from "puppeteer-core";
+import puppeteer from "puppeteer";
 
 export async function POST(req) {
   // Use BASE_URL from env if available, otherwise fallback to dynamic baseUrl
@@ -50,10 +49,16 @@ export async function POST(req) {
   console.log("[API] Puppeteer previewUrl:", previewUrl);
 
   const browser = await puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath,
-    headless: chromium.headless,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--single-process",
+      "--no-zygote",
+      "--disable-gpu",
+    ],
+    executablePath: puppeteer.executablePath(),
+    headless: "new",
   });
   const page = await browser.newPage();
   await page.goto(previewUrl, { waitUntil: "networkidle0" });
