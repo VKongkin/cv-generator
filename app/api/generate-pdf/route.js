@@ -1,11 +1,6 @@
 import puppeteer from "puppeteer";
 
 export async function POST(req) {
-  // Dynamically determine base URL from request headers
-  const host = req.headers.get("host");
-  const protocol = req.headers.get("x-forwarded-proto") || "http";
-  const baseUrl = `${protocol}://${host}`;
-
   let cvData = null;
   let useLivePreview = false;
   let id = null;
@@ -15,8 +10,10 @@ export async function POST(req) {
     const parsed = JSON.parse(body);
     if (parsed.id) {
       id = parsed.id;
-      // Fetch CV data from cache using dynamic baseUrl
-      const cacheRes = await fetch(`${baseUrl}/api/cv-cache?id=${id}`);
+      // Fetch CV data from cache
+      const cacheRes = await fetch(
+        `http://localhost:3000/api/cv-cache?id=${id}`
+      );
       if (cacheRes.ok) {
         cvData = await cacheRes.json();
         console.log("[API] Loaded cvData from cache for id:", id);
@@ -34,8 +31,9 @@ export async function POST(req) {
     cvData = null;
   }
 
-  // Use dynamic baseUrl for previewUrl
-  let previewUrl = `${baseUrl}/cv/preview${useLivePreview ? "" : "/pdf"}`;
+  let previewUrl = `http://localhost:3000/cv/preview${
+    useLivePreview ? "" : "/pdf"
+  }`;
   if (id) {
     previewUrl += `?id=${id}`;
   } else if (cvData) {
