@@ -2,8 +2,7 @@ import { CVPreview } from "@/components/cv-preview";
 import { defaultCVData } from "@/types/cv-types";
 
 async function fetchCVDataById(id: string) {
-  const baseUrl = process.env.BASE_URL || "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/cv-cache?id=${id}`);
+  const res = await fetch(`http://localhost:3000/api/cv-cache?id=${id}`);
   if (!res.ok) return null;
   return await res.json();
 }
