@@ -48,7 +48,18 @@ export async function POST(req) {
   }
   console.log("[API] Puppeteer previewUrl:", previewUrl);
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--single-process",
+      "--no-zygote",
+      "--disable-gpu",
+    ],
+    executablePath: puppeteer.executablePath(),
+    headless: "new",
+  });
   const page = await browser.newPage();
   await page.goto(previewUrl, { waitUntil: "networkidle0" });
   await page.waitForSelector(".cv-page", { timeout: 30000 });
